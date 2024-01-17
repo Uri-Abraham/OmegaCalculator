@@ -1,4 +1,20 @@
+from Operators import *
+
 acceptable_chars = set('0123456789. +-*/^@$&%~!#()')
+
+op_dict = {
+    "+": Plus(1, 1),
+    "-": Minus(1, 1),
+    "*": Mul(2, 1),
+    "/": Div(2, 1),
+    "^": Pow(3, 1),
+    "%": Modulo(4, 1),
+    "@": Avg(5, 1),
+    "$": Max(5, 1),
+    "&": Min(5, 1),
+    "~": Tilda(6, 2),
+    "!": Factorial(6, 3)
+}
 
 
 def initial_validation(exp: str) -> bool:
@@ -35,7 +51,10 @@ def parse_to_list(exp: str) -> list:
                     break
             infix_exp.append(str_to_num(exp[i - count: i]))
             count = 0
+        elif exp[i] == '.':
+            print("decimal dot at an illegal place")
+            exit()
         else:
-            infix_exp.append(exp[i])
+            infix_exp.append(op_dict[exp[i]])
             i += 1
     return infix_exp
