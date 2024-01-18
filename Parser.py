@@ -1,10 +1,21 @@
-from Operators import *
+from Operators.Operator import *
+from Operators.BinaryOperators.Addition import *
+from Operators.BinaryOperators.Subtraction import *
+from Operators.BinaryOperators.Division import *
+from Operators.BinaryOperators.Multiplication import *
+from Operators.BinaryOperators.Power import *
+from Operators.BinaryOperators.Modulo import *
+from Operators.BinaryOperators.Average import *
+from Operators.BinaryOperators.Maximum import *
+from Operators.BinaryOperators.Minimum import *
+from Operators.UnaryOperators.Tilda import *
+from Operators.UnaryOperators.Factorial import *
 
 acceptable_chars = set('0123456789. +-*/^@$&%~!#()')
 
 op_dict = {
     "+": Plus(1, 1),
-    "-": Minus(1, 1),
+    "-": Sub(1, 1),
     "*": Mul(2, 1),
     "/": Div(2, 1),
     "^": Pow(3, 1),
@@ -55,6 +66,14 @@ def parse_to_list(exp: str) -> list:
             print("decimal dot at an illegal place")
             exit()
         else:
-            infix_exp.append(op_dict[exp[i]])
+            infix_exp.append(exp[i])
             i += 1
     return infix_exp
+
+
+def remove_extra_parentheses(exp: list) -> list:
+    for i in range(len(exp) - 2):
+        if exp[i] == '(' and exp[i+2] == ')':
+            exp.pop(i)
+            exp.pop(i+1)
+    return exp
