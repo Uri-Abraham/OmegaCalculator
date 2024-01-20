@@ -10,6 +10,8 @@ from Operators.BinaryOperators.Maximum import *
 from Operators.BinaryOperators.Minimum import *
 from Operators.UnaryOperators.Tilda import *
 from Operators.UnaryOperators.Factorial import *
+from Operators.UnaryOperators.Hashtag import *
+from Operators.UnaryOperators.Minus import *
 
 acceptable_chars = set('0123456789. +-*/^@$&%~!#()')
 
@@ -19,22 +21,22 @@ op_dict = {
     "*": Mul(2, 1),
     "/": Div(2, 1),
     "^": Pow(3, 1),
+    "U-": Minus(3.5, 2),
     "%": Modulo(4, 1),
     "@": Avg(5, 1),
     "$": Max(5, 1),
     "&": Min(5, 1),
     "~": Tilda(6, 2),
+    "#": Hashtag(6, 3),
     "!": Factorial(6, 3)
 }
 
 
-def initial_validation(exp: str) -> bool:
+def initial_validation(exp: str) -> None:
     chars_in_expression = set(exp)
-    if chars_in_expression.issubset(acceptable_chars):
-        return True
-    else:
+    if not chars_in_expression.issubset(acceptable_chars):
         print("It appears the expression contains unknown symbols")
-        return False
+        exit()
 
 
 def str_to_num(num: str) -> float:
@@ -47,7 +49,9 @@ def str_to_num(num: str) -> float:
 
 
 def parse_to_list(exp: str) -> list:
-    if not initial_validation(exp):
+    try:
+        initial_validation(exp)
+    except TypeError as e:
         exit()
     exp = exp.replace(" ", "")
     infix_exp = []
@@ -55,7 +59,7 @@ def parse_to_list(exp: str) -> list:
     i = 0
     while i < len(exp):
         if exp[i].isdigit():
-            while exp[i].isdigit() or exp[i] == '.':  # (exp[i].isdigit() or exp[i] == '.') and i < len(exp)
+            while exp[i].isdigit() or exp[i] == '.':
                 count += 1
                 i += 1
                 if not i < len(exp):
@@ -72,8 +76,43 @@ def parse_to_list(exp: str) -> list:
 
 
 def remove_extra_parentheses(exp: list) -> list:
-    for i in range(len(exp) - 2):
-        if exp[i] == '(' and exp[i+2] == ')':
+    i = 0
+    while i < len(exp) - 2:
+        if exp[i] == '(' and exp[i + 2] == ')':
             exp.pop(i)
-            exp.pop(i+1)
+            exp.pop(i + 1)
+            i = 0
+        else:
+            i += 1
     return exp
+
+
+def check_unary_minuses(exp: list) -> list:
+    if len(exp) > 1 and exp[0] == '-':
+        if isinstance(exp[1], float) or exp[1] == '(':
+            exp[0] = "U-"
+    i = 1
+    while i < len(exp) - 1:
+        if exp[i] == '-':
+            if isinstance(exp[i + 1], float) and (not isinstance(exp[i - 1], float) and exp[i - 1] != ')'):
+                exp[i] = "U-"
+                i = 0
+            elif exp[i + 1] == "U-" and not isinstance(exp[i - 1], float):
+                exp.pop(i)
+                exp.pop(i)
+                i = 0
+            i += 1
+        else:
+            i += 1
+    return exp
+
+
+def check_parentheses_imbalance(exp: list) -> bool:
+    opening_p_count = 0
+    closing_p_count = 0
+    for i in range(len(exp)):
+        if exp[i] == '(':
+            opening_p_count += 1
+        elif exp[i] == ')':
+            closing_p_count += 1
+    return opening_p_count == closing_p_count

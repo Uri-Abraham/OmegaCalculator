@@ -1,3 +1,5 @@
+import sys
+
 from Operators.UnaryOperators.UnaryOperator import UnaryOperator
 
 
@@ -9,17 +11,27 @@ class Factorial(UnaryOperator):
     def unary_operation(self, operand: float) -> int:
         if self.validate_operand(operand):
             return Factorial.factorial(int(operand))
+        else:
+            print("Can't execute factorial on a non-natural number")
+            exit()
 
     @staticmethod
     def factorial(num: int) -> int:
         fact = 1
         for i in range(1, num + 1):
             fact = fact * i
+        if fact > 1.7976931348623157e+308:  # max size of float
+            print("Result of factorial is too large!!")
+            exit()
         return fact
 
-    def validate_operand(self, operand: float):
+    def validate_operand(self, operand: float) -> bool:
         try:
-            operand = int(operand)
-        except Exception as e:
-            print(e)
+            float(operand)
+        except (TypeError, ValueError) as e:
+            print("Missing an operand on factorial")
             exit()
+
+        if operand < 0 or operand % 1 != 0:
+            return False
+        return True
