@@ -7,12 +7,26 @@ def get_expression() -> str:
         string = input("Please enter a mathematic expression:\n")
     except EOFError as eof:
         print("EOF Error")
+    if len(string) == 0:
+        print("Empty expression")
+        exit()
     return string
 
 
 def main():
     expression = get_expression()
-    calculate_expression(expression)
+    print(calculate_expression(expression))
+
+
+def main_tests(exp: str) -> float:
+    try:
+        return calculate_expression(exp)
+    except EOFError as e:
+        print("EOF error!")
+        exit()
+    except IndexError as e:
+        print("empty string!")
+        exit()
 
 
 if __name__ == "__main__":

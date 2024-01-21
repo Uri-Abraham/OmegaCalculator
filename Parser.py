@@ -42,8 +42,8 @@ def initial_validation(exp: str) -> None:
 def str_to_num(num: str) -> float:
     try:
         float(num)
-    except Exception as e:
-        print("Error!")
+    except (ValueError, TypeError) as e:
+        print("Decimal dot at an illegal place")
         exit()
     return float(num)
 
@@ -54,6 +54,9 @@ def parse_to_list(exp: str) -> list:
     except TypeError as e:
         exit()
     exp = exp.replace(" ", "")
+    if len(exp) == 0:
+        print("Empty string!")
+        exit()
     infix_exp = []
     count = 0
     i = 0
@@ -94,7 +97,8 @@ def check_unary_minuses(exp: list) -> list:
     i = 1
     while i < len(exp) - 1:
         if exp[i] == '-':
-            if isinstance(exp[i + 1], float) and (not isinstance(exp[i - 1], float) and exp[i - 1] != ')'):
+            if (isinstance(exp[i + 1], float) or exp[i + 1] == '(') and (
+                    not isinstance(exp[i - 1], float) and exp[i - 1] != ')'):
                 exp[i] = "U-"
                 i = 0
             elif exp[i + 1] == "U-" and not isinstance(exp[i - 1], float):

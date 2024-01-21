@@ -17,7 +17,6 @@ def calculate_expression(exp: str) -> float:
             exit()
     expression = remove_extra_parentheses(expression)
     expression = check_unary_minuses(expression)
-    print(expression)
     while len(expression) > 1:
         next_op_index = find_max_kdimut(expression)
         if next_op_index == -1 and len(expression) > 1:
@@ -25,7 +24,7 @@ def calculate_expression(exp: str) -> float:
             exit()
         op_type = op_dict[expression[next_op_index]].get_op_type()
         expression = do_next_operation(expression, next_op_index, op_type)
-        print(expression)
+    return expression[0]
 
 
 def do_next_operation(expression: list, next_op_index: int, op_type: int) -> list:
