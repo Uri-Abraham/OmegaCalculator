@@ -16,6 +16,6 @@ class Max(BinaryOperator):  # '$'
         try:
             float(first_operand)
             float(second_operand)
-        except TypeError as e:
+        except (TypeError, ValueError):
             print("$ didn't get two valid operands")
             exit()

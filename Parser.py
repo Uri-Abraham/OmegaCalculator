@@ -108,6 +108,10 @@ def check_unary_minuses(exp: list) -> list:
             i += 1
         else:
             i += 1
+    for i in range(1, len(exp)):
+        if exp[i-1] in op_dict:
+            if op_dict[exp[i - 1]].get_op_type() == 3 and exp[i] == "U-":
+                exp[i] = "-"
     return exp
 
 

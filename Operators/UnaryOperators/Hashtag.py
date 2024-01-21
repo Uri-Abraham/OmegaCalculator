@@ -18,7 +18,7 @@ class Hashtag(UnaryOperator):
     def validate_operand(self, operand: float) -> bool:
         try:
             float(operand)
-        except (TypeError, ValueError) as e:
+        except (TypeError, ValueError):
             print("Hashtag didn't get operator")
             exit()
         if operand >= 0:

@@ -13,7 +13,7 @@ class Tilda(UnaryOperator):  # '~'
     def validate_operand(self, operand: float) -> bool:
         try:
             float(operand)
-        except TypeError as e:
+        except (TypeError, ValueError):
             print("~ Missing an operand")
             exit()
         return True

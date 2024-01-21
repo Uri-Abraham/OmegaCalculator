@@ -16,6 +16,6 @@ class Min(BinaryOperator):  # '&'
         try:
             float(first_operand)
             float(second_operand)
-        except TypeError as e:
+        except (TypeError, ValueError) as e:
             print("& didn't get two valid operands")
             exit()

@@ -6,10 +6,9 @@ def get_expression() -> str:
     try:
         string = input("Please enter a mathematic expression:\n")
     except EOFError as eof:
-        print("EOF Error")
+        raise SystemExit("EOF Error")
     if len(string) == 0:
-        print("Empty expression")
-        exit()
+        raise SystemExit("Empty expression")
     return string
 
 
@@ -23,9 +22,6 @@ def main_tests(exp: str) -> float:
         return calculate_expression(exp)
     except EOFError as e:
         print("EOF error!")
-        exit()
-    except IndexError as e:
-        print("empty string!")
         exit()
 
 
