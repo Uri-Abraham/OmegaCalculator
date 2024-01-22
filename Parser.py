@@ -33,6 +33,11 @@ op_dict = {
 
 
 def initial_validation(exp: str) -> None:
+    """
+    checks if the string contains illegal symbols, exits if it does
+    :param exp: the expression string
+    :return: None
+    """
     chars_in_expression = set(exp)
     if not chars_in_expression.issubset(acceptable_chars):
         print("It appears the expression contains unknown symbols")
@@ -40,18 +45,29 @@ def initial_validation(exp: str) -> None:
 
 
 def str_to_num(num: str) -> float:
+    """
+    converts a string to float
+    :param num: the number in string type
+    :return: the number as a float
+    """
     try:
         float(num)
-    except (ValueError, TypeError) as e:
+    except (ValueError, TypeError):
         print("Decimal dot at an illegal place")
         exit()
     return float(num)
 
 
 def parse_to_list(exp: str) -> list:
+    """
+    gets the mathematical expression as a string and converts it to a list where each element is an operator,
+    operand or a parentheses
+    :param exp: the mathematical expression as a string
+    :return: the mathematical expression in a list format
+    """
     try:
         initial_validation(exp)
-    except TypeError as e:
+    except TypeError:
         exit()
     exp = exp.replace(" ", "")
     if len(exp) == 0:
@@ -79,6 +95,11 @@ def parse_to_list(exp: str) -> list:
 
 
 def remove_extra_parentheses(exp: list) -> list:
+    """
+    removes redundant parentheses from the list
+    :param exp: the mathematical expression as a list
+    :return: the mathematical expression as a list
+    """
     i = 0
     while i < len(exp) - 2:
         if exp[i] == '(' and exp[i + 2] == ')':
@@ -91,8 +112,13 @@ def remove_extra_parentheses(exp: list) -> list:
 
 
 def check_unary_minuses(exp: list) -> list:
+    """
+    checks for binary minuses that should be unary minuses and replaces them
+    :param exp: the mathematical expression as a list
+    :return: mathematical expression as a list
+    """
     if len(exp) > 1 and exp[0] == '-':
-        if isinstance(exp[1], float) or exp[1] == '(':
+        if isinstance(exp[1], float) or exp[1] == '(' or exp[1] == '-':
             exp[0] = "U-"
     i = 1
     while i < len(exp) - 1:
@@ -101,7 +127,7 @@ def check_unary_minuses(exp: list) -> list:
                     not isinstance(exp[i - 1], float) and exp[i - 1] != ')'):
                 exp[i] = "U-"
                 i = 0
-            elif exp[i + 1] == "U-" and not isinstance(exp[i - 1], float):
+            elif exp[i + 1] == "U-" and not isinstance(exp[i - 1], float) and not exp[i - 1] in ")!#":
                 exp.pop(i)
                 exp.pop(i)
                 i = 0
@@ -112,10 +138,18 @@ def check_unary_minuses(exp: list) -> list:
         if exp[i-1] in op_dict:
             if op_dict[exp[i - 1]].get_op_type() == 3 and exp[i] == "U-":
                 exp[i] = "-"
+    while exp[0] == "U-" and exp[1] == "U-":
+        exp.pop(0)
+        exp.pop(0)
     return exp
 
 
 def check_parentheses_imbalance(exp: list) -> bool:
+    """
+    checks if there is a legal number a parentheses in the mathematical expression.
+    :param exp: the mathematical expression as a list
+    :return: true if there's parentheses balance, false otherwise
+    """
     opening_p_count = 0
     closing_p_count = 0
     for i in range(len(exp)):

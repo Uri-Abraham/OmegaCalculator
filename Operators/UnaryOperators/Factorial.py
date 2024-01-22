@@ -9,6 +9,11 @@ class Factorial(UnaryOperator):
         self._op_type = op_type  # 1 Binary, 2 Left To Operand Unary , 3 Right To Operand Unary
 
     def unary_operation(self, operand: float) -> int:
+        """
+        calculate the factorial of the operand
+        :param operand: the operand
+        :return: the result of the factorial
+        """
         if self.validate_operand(operand):
             return Factorial.factorial(int(operand))
         else:
@@ -17,6 +22,11 @@ class Factorial(UnaryOperator):
 
     @staticmethod
     def factorial(num: int) -> int:
+        """
+        calculates a factorial for a given number
+        :param num: a natural number
+        :return: the result of the factorial
+        """
         fact = 1
         for i in range(1, num + 1):
             fact = fact * i
@@ -26,6 +36,11 @@ class Factorial(UnaryOperator):
         return fact
 
     def validate_operand(self, operand: float) -> bool:
+        """
+        checks if the operand is a valid operand for this class calculation
+        :param operand: the operand
+        :return: true if the operand is valid
+        """
         try:
             float(operand)
         except (TypeError, ValueError):

@@ -4,6 +4,12 @@ from Parser import *
 
 
 def calculate_expression(exp: str) -> float:
+    """
+    the main function for calculating the mathematical expression. It does necessary checks on the list,
+    then calculates the next operator action in every iteration of the while loop.
+    :param exp: the mathematical expression as a string
+    :return: the end result of the mathematical expression
+    """
     expression = parse_to_list(exp)
     if not check_parentheses_imbalance(expression):
         print("Odd number of parentheses")
@@ -17,6 +23,7 @@ def calculate_expression(exp: str) -> float:
             exit()
     expression = remove_extra_parentheses(expression)
     expression = check_unary_minuses(expression)
+    expression = remove_extra_parentheses(expression)
     while len(expression) > 1:
         next_op_index = find_max_kdimut(expression)
         if next_op_index == -1 and len(expression) > 1:
@@ -28,6 +35,13 @@ def calculate_expression(exp: str) -> float:
 
 
 def do_next_operation(expression: list, next_op_index: int, op_type: int) -> list:
+    """
+    the function preforms the next operation action then returns the aftermath.
+    :param expression: the mathematical expression as a list
+    :param next_op_index: the index in the list of the operator that it'll calculate
+    :param op_type: the type of operator it will preform the action of, can be binary or unary for either side
+    :return: the mathematical expression as a list
+    """
     if op_type == 1:
         if len(expression) - 1 > next_op_index >= 1:
             expression[next_op_index] = op_dict[expression[next_op_index]].binary_operation(
@@ -61,6 +75,11 @@ def do_next_operation(expression: list, next_op_index: int, op_type: int) -> lis
 
 
 def find_max_kdimut(exp: list) -> int:
+    """
+    finds the index of the operator that the algorithm should calculate next
+    :param exp: the mathematical expression as a list
+    :return: the index of the found operator
+    """
     index = -1
     max_kdimut = 0
     parentheses_bonus = 0
@@ -82,6 +101,12 @@ def find_max_kdimut(exp: list) -> int:
 
 
 def tilda_special_case(exp: list, tilda_index: int) -> list:
+    """
+    handles the special guidelines of the tilda operator
+    :param exp: the mathematical expression as a list
+    :param tilda_index: the tilda's index in list
+    :return: the mathematical expression as a list
+    """
     if exp[tilda_index + 1] == "U-":
         if tilda_index + 2 < len(exp):
             exp[tilda_index + 1] = op_dict["U-"].unary_operation(exp[tilda_index + 2])

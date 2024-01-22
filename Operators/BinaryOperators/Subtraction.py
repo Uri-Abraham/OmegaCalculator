@@ -7,14 +7,26 @@ class Sub(BinaryOperator):
         self._op_type = op_type  # 1 Binary, 2 Left To Operand Unary , 3 Right To Operand Unary
 
     def binary_operation(self, first_operand: float, second_operand: float) -> float:
+        """
+        subtracts two operands
+        :param first_operand: the first operand
+        :param second_operand: the second operand
+        :return: the difference of the two numbers
+        """
         self.validate_operands(first_operand, second_operand)
         try:
             return first_operand - second_operand
-        except OverflowError as e:
+        except OverflowError:
             print("result of - is too damn large!")
             exit()
 
     def validate_operands(self, first_operand: float, second_operand: float) -> None:
+        """
+        checks if both operands are valid operands for this class calculation
+        :param first_operand: the first operand
+        :param second_operand: the second operand
+        :return: None
+        """
         try:
             float(first_operand)
             float(second_operand)
